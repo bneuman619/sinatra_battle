@@ -1,0 +1,80 @@
+.container {
+  margin: 20px auto;
+  width: 600px;
+  /*padding: 0px 20px 20px 20px;*/
+  border: 1px dotted black;
+}
+th {
+  text-align: left;
+}
+
+a.row_number {
+  display: inline-block;
+  height: 55px;
+  width: 50px;
+  text-decoration: none;
+  font-size: 2em;
+  margin: auto;
+  text-align: center;
+}
+
+a.cnum {
+  display: inline-block;
+  height: 40px;
+  width: 70px;
+  padding: 5px 5px 0px 5px;
+  text-decoration: none;
+  font-size: 2em;
+  margin: auto;
+  text-align: center;
+  color: black;
+}
+
+a.coord {
+  
+  display: inline-block;
+  height: 50px;
+  width: 70px;
+  padding: 5px 5px 0px 5px;
+  background-color: #444;
+  text-decoration: none;
+  font-size: 3em;
+  margin: auto;
+  text-align: center;
+}
+
+.empty {
+  color: #333;
+}
+
+.hit {
+  display: inline-block;
+  height: 50px;
+  width: 70px;
+  padding: 5px 5px 0px 5px;
+  background-color: #444;
+  color: #ff0000;
+  text-decoration: none;
+  font-size: 3em;
+  margin: auto;
+  text-align: center;
+}
+
+.miss { 
+  display: inline-block;
+  height: 50px;
+  width: 70px;
+  padding: 5px 5px 0px 5px;
+  background-color: #444;
+  color: #fff;
+  text-decoration: none;
+  font-size: 3em;
+  margin: auto;
+  text-align: center;
+}
+
+div.row {
+  display: block;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
