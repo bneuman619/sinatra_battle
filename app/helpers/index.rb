@@ -30,7 +30,7 @@ helpers do
   end
 
   def get_shot_coord
-    params[:coord][1..-1].to_i
+    params[:coord][2..-1].to_i
   end
 
   def check_shot(shot_coord, enemy)

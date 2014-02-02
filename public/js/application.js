@@ -1,14 +1,46 @@
 $(document).ready(function() {
   console.log('hello');
-  start_game();
+  show_dboard();
+  setup();
   // $(".coord.empty").click(function(event) { 
   //   console.log('foo'); 
   // });
 
+
+  function show_dboard() {
+    $("#oboard").hide();
+    $("#dboard").show();
+  }
+
+  function show_oboard() {
+    $("#dboard").hide();
+    $("#oboard").show();
+  }
+
+  function setup() {
+    $.get("/defense_board", set_defense_board).done(start_game);
+  }
+
+  function set_defense_board(data) {
+    var dboard = $.parseJSON(data);
+    console.log(dboard);
+  
+    for(i = 0; i - 1 < dboard.length; i++) {
+   
+      if (dboard[i]) {
+        cid = "#dc" + (i + 1);
+        console.log(cid);
+        $(cid).removeClass('empty').addClass('ship');
+      };
+    }
+  }
+
   function start_game() {
+
     $.get("/start_game", function(result) {
       if(result == "0") {
         console.log("You go first!");
+        show_oboard();
         start_turn();
       }
 
