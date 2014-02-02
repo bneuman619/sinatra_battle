@@ -1,6 +1,4 @@
 get '/' do
-  session[:player1_id] = 1
-  session[:player2_id] = 2
   erb :index
 end
 
@@ -11,26 +9,44 @@ get '/defense_board' do
 end
 
 post '/shoot' do
-  shot_coord = params[:coord][1..-1].to_i
-  puts "shot_coord #{shot_coord}"
-  defense = Player.find(session[:player2_id])
-  defense.coords.each do |coord|
-    puts coord.coord
-    return "1" if shot_coord == coord.coord.to_i
-  end
-
-  return "0"
+  player = get_player
+  enemy = get_enemy
+  shot_coord = get_shot_coord
+  result = check_shot(shot_coord, enemy)
+  player.log_guess(shot_coord, result)
+  result ? "1" : "0"
 end
 
 get '/player1' do
-  session[:user_id] = 1
+  session[:player_id] = 1
+  set_enemy_id
+  reset_last_guess(get_last_enemy_guess)
+  session.inspect
 end
 
 get '/player2' do
-  session[:user_id] = 2
+  session[:player_id] = 2
+  set_enemy_id
+  reset_last_guess(get_last_enemy_guess)
+  session.inspect
 end
 
-get '/opponent_shoot' do
-  player = Player.find(session[:user_id])
-  opponent = Game.find()
+get '/start_game' do
+  if session[:player_id] == 1
+    "0"
+  else
+    "1"
+  end
+end
 
+get '/wait_for_shot' do
+  player = get_player
+  if new_enemy_guess?
+    guess = get_last_enemy_guess
+    reset_last_guess(guess)
+    {coord: guess.coord, hit: guess.hit}.to_json
+
+  else
+    {}.to_json
+  end
+end

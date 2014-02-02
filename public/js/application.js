@@ -1,27 +1,75 @@
 $(document).ready(function() {
   console.log('hello');
-
+  start_game();
   // $(".coord.empty").click(function(event) { 
   //   console.log('foo'); 
   // });
-  $(".coord").click(function(event) {
-    event.preventDefault();
-    coord = event.target;
-    // what = {}
 
-    $.post("/shoot", {coord: coord.id}, function(result) {
-      console.log(result);
+  function start_game() {
+    $.get("/start_game", function(result) {
       if(result == "0") {
-        $(coord).removeClass("empty").addClass("miss");
+        console.log("You go first!");
+        start_turn();
       }
 
       else {
-        $(coord).removeClass("empty").addClass("hit");
-      };
+        console.log("You get shot first!");
+        end_turn();
+      }
 
     })
-  })
- 
+  }
+
+  function get_shot() {
+    interval = setInterval(check_shot, 5000);
+
+    function check_shot() {
+      $.get("/wait_for_shot", function(result) {
+        result = JSON.parse(result);
+        console.log(result);
+
+        if (!$.isEmptyObject(result)) {
+          clearInterval(interval);
+          start_turn();
+        }
+
+      });
+    }
+  }
+
+  function start_turn() {
+    $(".coord").off();
+    $(".coord").on("click", shoot);
+  }
+
+  function shoot(clicked_coord) {
+    event.preventDefault();
+    coord = event.target;
+
+    $.post("/shoot", {coord: coord.id}, parse_shot_result).done(end_turn);
+  }
+
+  function parse_shot_result(result) {
+    console.log(result);
+
+    if(result == "0") {
+      $(coord).removeClass("empty").addClass("miss");
+    }
+
+    else {
+      $(coord).removeClass("empty").addClass("hit");
+    };
+  }
+
+  function end_turn() {
+    $(".coord").off();
+    $(".coord").on("click", catch_clicks);
+    get_shot(); 
+  }
+
+  function catch_clicks() { 
+    event.preventDefault(); 
+  }
 });
 
 

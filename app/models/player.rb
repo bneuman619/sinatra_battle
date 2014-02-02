@@ -25,4 +25,8 @@ class Player < ActiveRecord::Base
     end
     board
   end
+
+  def log_guess(shot_coord, result)
+    self.guesses.create(coord: shot_coord, hit: result)
+  end
 end
