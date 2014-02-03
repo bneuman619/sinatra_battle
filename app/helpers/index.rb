@@ -16,17 +16,21 @@ helpers do
     Player.find(session[:enemy_id])
   end
 
+  def get_current_game
+    Game.find(session[:game_id])
+  end
+
   def new_enemy_guess?
-    last_guess = get_last_enemy_guess
-    last_guess.id > session[:last_enemy_guess_id]
+    latest_guess = get_latest_guess
+    latest_guess ? (get_latest_guess.player == get_enemy) : false
+  end
+
+   def get_latest_guess
+    get_current_game.get_guesses[-1]
   end
 
   def get_last_enemy_guess
-    Guess.where(player_id: session[:enemy_id]).last
-  end
-
-  def reset_last_guess(guess)
-    session[:last_enemy_guess_id] = guess.id
+    Guess.where(player_id: session[:enemy_id]).order(id: :desc).first
   end
 
   def get_shot_coord
@@ -36,5 +40,12 @@ helpers do
   def check_shot(shot_coord, enemy)
     enemy.coords.any? { |coord| shot_coord == coord.coord.to_i }
   end
-end
 
+  def my_turn?
+    get_current_game.current_player == get_player
+  end
+
+  def end_turn
+    get_current_game.current_player = get_enemy
+  end
+end

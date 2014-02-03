@@ -15,7 +15,7 @@ end
 
 p1 = Player.create(user_id: 1)
 p2 = Player.create(user_id: 2)
-g = Game.create(player1: p1, player2: p2)
+g = Game.create(player1: p1, player2: p2, current_player: p1)
 p1.set_game(g)
 p2.set_game(g)
 

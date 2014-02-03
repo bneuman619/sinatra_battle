@@ -4,6 +4,7 @@ class CreateGuesses < ActiveRecord::Migration
       t.integer :player_id
       t.integer :coord
       t.boolean :hit
+      t.timestamps
     end
   end
 end
