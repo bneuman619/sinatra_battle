@@ -4,35 +4,46 @@ function Game() {
   }
 
   that = this;
-  this.turn = that.new_turn();
+  this.turn = this.new_turn();
   this.over = false;
-  this.interval = null;
-
+  this.next_turn_please = false;
+  this.interval =  null;
   
-
   this.next_turn = function() {
     that.turn.turn.render();
-    this.turn = that.new_turn();
+    that.turn = that.new_turn();
   }
 
-
-  this.check_turn = function() {
-    
-    if(this.turn.turn.done) {
+  this.check_turn = function check_turn() {
+    console.log("Check turn...");
+    if(that.turn.turn.done) {
       console.log("done!");
       that.next_turn();
     }
 
-    else if(this.over) {
+    else if(that.over) {
       clearInterval(that.interval)
     }
   }
 
   
+  
 }
 
 function game_logic() {
   game = new Game();
-  game.interval = setInterval(game.check_turn, 5000);
+  game.interval = setInterval(check_turn, 5000);
+
+  function check_turn() {
+    if(game.turn.turn.done) {
+      console.log("done....");
+      game.next_turn_please = true;
+    }
+
+    else {
+      console.log("not done...");
+    }
+  }
+
   return game;
 }

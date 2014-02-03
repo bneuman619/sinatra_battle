@@ -11,7 +11,7 @@ $(document).ready(function() {
 
 
  function setup() {
-  console.log("FUCK YOU");
+  console.log("I hate JS");
     $.ajax({
       url: "/defense_board",
       cache: false,
@@ -31,7 +31,7 @@ $(document).ready(function() {
 
 
 function make_offense_board(coords) {
-  console.log("IDIOT");
+  console.log("making offense board");
   board = new OffenseBoard(coords);
   board.parse_coords();
   console.log(board.hits);
@@ -40,7 +40,7 @@ function make_offense_board(coords) {
 }
 
 function make_defense_board(coords) { 
-  console.log("YOU SUCK");
+  console.log("making defense board");
   board = new DefenseBoard(coords);
   board.parse_coords();
   console.log(board.ships);

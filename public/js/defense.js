@@ -10,7 +10,7 @@ function DefenseTurn() {
   this.interval = null;
 
   this.check_shot = function check_shot() {
-    console.log("Checking the fucking shot");
+    console.log("Checking the shot");
     $.ajax({
         url: "/check_for_shot", 
         cache: false,
@@ -62,65 +62,4 @@ function start_defense_turn() {
   return turn;
 }
 
-function Turn() {
-  this.turn = null;
-  that = this;
 
-  this.check_turn = function check_turn() {
-    console.log("before ajax");
-    $.ajax({
-      url: "/start_game",
-      cache: false,
-      success: that.log_turn,
-      type: "GET"
-      })
-    console.log("after ajax");
-  }
-
-  that.log_turn = function log_turn(turn) {
-    console.log("In log turn");
-    console.log("turn");
-    if(turn === "0") {
-      that.turn = start_offense_turn();
-    }
-
-    else {
-      that.turn = start_defense_turn();
-    }
-  }
-
-  this.check_turn();
-}
-
-function Game() {
-  that = this;
-  this.over = false;
-  this.turn = new_turn;
-  this.interval = null;
-  
-
-  this.new_turn = function() { 
-    that.turn = new Turn();
-  }
-
-  this.next_turn = function() {
-    that.turn.render();
-    that.new_turn();
-  }
-
-
-  this.check_turn = function() {
-    if(that.turn.done()) {
-      that.next_turn();
-    }
-
-    else if(that.over) {
-      clearInterval(that.interval)
-    }
-  }
-}
-
-function game_logic() {
-  game = new Game();
-  game.interval = setInterval(game.check_turn, 5000);
-}

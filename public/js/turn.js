@@ -1,6 +1,7 @@
 function Turn() {
-  this.turn = null;
+
   that = this;
+  this.turn = null;
 
   this.check_turn = function check_turn() {
     console.log("before ajax");
@@ -13,7 +14,7 @@ function Turn() {
     console.log("after ajax");
   }
 
-  that.log_turn = function log_turn(turn) {
+  this.log_turn = function log_turn(turn) {
     console.log("In log turn");
     console.log("turn");
     if(turn === "0") {
@@ -25,5 +26,5 @@ function Turn() {
     }
   }
 
-  this.check_turn();
+  this.check_turn(); 
 }
