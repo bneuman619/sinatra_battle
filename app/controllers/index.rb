@@ -29,11 +29,11 @@ get '/player2' do
 end
 
 get '/start_game' do
-  # if my_turn?
-  #   "0"
-  # else
+  if my_turn?
+    "0"
+  else
     "1"
-  # end
+  end
 end
 
 post '/shoot' do

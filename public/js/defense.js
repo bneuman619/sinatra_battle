@@ -3,7 +3,7 @@
 function DefenseTurn() {
 
   show_dboard();
-  
+
   that = this;
   this.done = false;
   this.result = null;
@@ -12,7 +12,7 @@ function DefenseTurn() {
   this.check_shot = function check_shot() {
     console.log("Checking the shot");
     $.ajax({
-        url: "/check_for_shot", 
+        url: "/check_for_shot",
         cache: false,
         success: that.get_new_shot,
         type: "GET"
@@ -38,7 +38,7 @@ function DefenseTurn() {
   }
 
   that.log_result = function log_result(result) {
-    that.result = $.parseJSON(result); 
+    that.result = $.parseJSON(result);
   }
 
   that.render = function render() {
@@ -54,7 +54,7 @@ function DefenseTurn() {
   }
 }
 
-function start_defense_turn() { 
+function start_defense_turn() {
   turn = new DefenseTurn();
   $(".coord").off();
   $(".coord").on("click", function () { event.preventDefault(); });
