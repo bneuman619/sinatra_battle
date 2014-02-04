@@ -1,78 +1,96 @@
-function Game() {
-
+function Game() { 
   that = this;
+
+  this.turn_over_listener = function() {
+    $(document).on("turn_over", function(event) {
+      console.log("TURN OVER!");
+      this.next_turn();
+    })
+  }
+
+  this.startup_set_turn = function () {
+    $.ajax({
+      url: "/start_game",
+      cache: false,
+      success: function (res) {
+        if (res == "0") {
+         that.start_defense_turn();
+        }
+
+        else {
+         that.start_offense_turn();
+        }
+      },
+      type: "GET"
+      })
+  }
+
   this.turn = null;
-  this.current_turn = "0";
+  this.startup_set_turn();
+  this.turn_over_listener.bind(this);
   this.over = false;
-  this.next_turn_please = false;
 
   this.next_turn = function() {
     console.log("next turn...");
-    that.turn.render();
-    that.turn = this.new_turn();
+
+    alert("Confirm when ready to switch");
+    
+    if (this.turn.constructor.name == "DefenseTurn") {
+      this.start_offense_turn();
+    }
+
+    else if (this.turn.constructor.name == "OffenseTurn") {
+      this.start_defense_turn();
+    }
   }
 
-}
+  this.start_offense_turn = function() { 
+    this.turn = new OffenseTurn();
+    $(".coord").off();
+    $(".coord").on("click", this.turn.shoot);
+  }
 
+  this.start_defense_turn = function () {
+    this.turn = new DefenseTurn();
+    $(".coord").off();
+    $(".coord").on("click", function () { event.preventDefault(); });
+  }
+}
 
 game = new Game();
-startup_set_turn();
-interval = setInterval(more_stuff_to_do, 5000);
-turns = {"0": "DefenseTurn", "1" : "OffenseTurn"};
 
-function more_stuff_to_do() {
-  if (game.turn.done) {
-    console.log("turn done");
-    if (game.turn.constructor.name == "DefenseTurn") {
-      clearInterval(game.turn.interval);
-      game.turn.render();
-      game.turn = new OffenseTurn();
-      $(".coord").off();
-      $(".coord").on("click", game.turn.shoot);
-    }
-
-    else if (game.turn.constructor.name == "OffenseTurn") {
-      game.turn.render();
-      game.turn = new DefenseTurn();
-      $(".coord").off();
-      $(".coord").on("click", function () { event.preventDefault(); });
-      game.turn.interval = setInterval(game.turn.check_shot, 5000);
-    }
-  }
-
-  else {
-    console.log("Turn not done yet");
-  }
+turn_over_listener = function() {
+ $(document).on("turn_over", function(event) {
+    console.log("TURN OVER!");
+    game.next_turn();
+  })
 }
 
-function startup_set_turn() {
-  $.ajax({
-    url: "/start_game",
-    cache: false,
-    success: function (res) {
-      if (res == "0") {
-        console.log("on defense");
-        game.turn = new DefenseTurn();
-        console.log(game.turn);
-        $(".coord").off();
-        $(".coord").on("click", function () { event.preventDefault(); });
-        game.turn.interval = setInterval(game.turn.check_shot, 5000);
-      }
-
-      else {
-        console.log("on offense");
-        game.turn = new OffenseTurn();
-        console.log(game.turn);
-        $(".coord").off();
-        $(".coord").on("click", game.turn.shoot);
-      }
-    },
-    type: "GET"
-    })
-  console.log("after ajax");
- }
+turn_over_listener();
 
 
+
+
+
+
+
+
+
+
+
+
+// function more_stuff_to_do() {
+//   console.log("INTERVAL!");
+//   if (game.turn.done) {
+//     console.log("turn done");
+//     ;
+//     }
+//   }
+
+//   else {
+//     console.log("Turn not done yet");
+//   }
+// }
 // interval = setInterval(stuff_to_do, 5000);
 
 // turns = {"0": "DefenseTurn", "1" : "OffenseTurn"}

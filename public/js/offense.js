@@ -9,52 +9,61 @@ function OffenseTurn() {
   that = this;
  
  
-  this.shoot = function shoot(clicked_coord) {
+  this.shoot = function (clicked_coord) {
     event.preventDefault();
     console.log(event);
     that.coord = event.target;
 
-    $.post("/shoot", {coord: that.coord.id}, that.log_shot_result).done(that.mark_done);
+    $.post("/shoot", {coord: that.coord.id}, that.log_shot_result).done(that.end_turn.bind(that));
   }
 
-  this.log_shot_result = function log_shot_result(result) {
+  this.log_shot_result = function (result) {
     console.log(result);
     if(result == "0") {
-      that.result = false;
+      this.result = false;
      
     }
 
     else {
-      that.result = true;
+      this.result = true;
     };
   }
 
-  this.render = function render() {
+  this.render = function () {
     if (this.result == true) {
-      that.mark_hit(that.coord);
+      this.mark_hit(that.coord);
     }
 
     else {
-      that.mark_miss(that.coord)
+      this.mark_miss(that.coord)
     }
   }
 
-  this.mark_done = function mark_done() {
-    that.done = true;
+  this.trigger_end = function () { 
+    console.log("in trigger end");
+    $(document).trigger("turn_over", [this.done, this.result]);
   }
 
-  this.mark_miss = function mark_miss(coord_id) {
+
+  this.mark_done = function () {
+    this.done = true;
+    
+  }
+
+  this.mark_miss = function (coord_id) {
     $(coord_id).removeClass("empty").addClass("miss");
   }
 
-  this.mark_hit = function mark_hit(coord_id) { 
+  this.mark_hit = function (coord_id) { 
     $(coord_id).removeClass("empty").addClass("hit");
   }
-}
 
-function start_offense_turn() {
-  turn = new OffenseTurn();
-  $(".coord").off();
-  $(".coord").on("click", turn.shoot);
-  return turn;
+  this.end_turn = function () {
+    console.log("In end turn");
+    this.render();
+    console.log("Rendered");
+    this.mark_done();
+    console.log("marked done");
+    this.trigger_end();
+  }
 }

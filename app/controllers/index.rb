@@ -52,6 +52,10 @@ get '/check_for_shot' do
 end
 
 get '/get_latest_shot' do
-  guess = get_last_enemy_guess
-  {coord: guess.coord, hit: guess.hit}.to_json
+  latest_guess = get_latest_guess
+  if latest_guess.player == get_enemy
+    {coord: latest_guess.coord, hit: latest_guess.hit}.to_json
+  else
+    "false"
+  end
 end
