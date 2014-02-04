@@ -12,8 +12,6 @@ function DefenseTurn() {
      })
   }
 
-  show_dboard();
-
   that = this;
   this.done = false;
   this.result = null;
@@ -34,14 +32,19 @@ function DefenseTurn() {
 
   this.render = function () {
     cid = "#dc" + this.result.coord;
-
-    if ($(cid).hasClass("ship")) {
-        $(cid).removeClass("ship").addClass("hit");
+    result_string = "Opponent shot at " + this.result.coord + " and ";
+    console.log(this.result.hit);
+    if (this.result.hit) {
+      $(cid).removeClass("ship").addClass("hit");
+      result_string += "hit";
     }
 
     else {
       $(cid).removeClass("empty").addClass("miss");
+      result_string += "miss";
     }
+
+    $("#def_results").show().html(result_string);
   }
 
   this.mark_done = function () {
@@ -52,7 +55,7 @@ function DefenseTurn() {
     $(document).trigger("turn_over", [this.done, this.result]);
   }
 
-  this.end_turn = function () { 
+  this.end_turn = function () {
     clearInterval(this.interval);
     this.render();
     this.mark_done();

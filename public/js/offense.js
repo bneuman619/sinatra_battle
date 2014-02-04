@@ -1,14 +1,14 @@
 
 
 function OffenseTurn() {
-  show_oboard();
-  
+  // show_oboard();
+
   this.done = false;
   this.result = null;
   this.coord = null;
   that = this;
- 
- 
+
+
   this.shoot = function (clicked_coord) {
     event.preventDefault();
     console.log(event);
@@ -21,7 +21,7 @@ function OffenseTurn() {
     console.log(result);
     if(result == "0") {
       this.result = false;
-     
+
     }
 
     else {
@@ -30,16 +30,22 @@ function OffenseTurn() {
   }
 
   this.render = function () {
+    result_string = "You shot at " + that.coord.id + " and ";
+
     if (this.result == true) {
       this.mark_hit(that.coord);
+      result_string += "hit";
     }
 
     else {
       this.mark_miss(that.coord)
+      result_string += "miss;"
     }
+
+    $("#off_results").show().html(result_string);
   }
 
-  this.trigger_end = function () { 
+  this.trigger_end = function () {
     console.log("in trigger end");
     $(document).trigger("turn_over", [this.done, this.result]);
   }
@@ -47,14 +53,14 @@ function OffenseTurn() {
 
   this.mark_done = function () {
     this.done = true;
-    
+
   }
 
   this.mark_miss = function (coord_id) {
     $(coord_id).removeClass("empty").addClass("miss");
   }
 
-  this.mark_hit = function (coord_id) { 
+  this.mark_hit = function (coord_id) {
     $(coord_id).removeClass("empty").addClass("hit");
   }
 
