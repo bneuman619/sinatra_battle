@@ -7,7 +7,10 @@ function DefenseTurn() {
     $.ajax({
         url: "/get_latest_shot",
         cache: false,
-        success: that.process_check_shot,
+        //If I call the process_check_shot method this way,
+        //I should be able to use 'this' within the method without a problem.
+        context: this,
+        success: this.process_check_shot,
         type: "GET"
      })
   }
@@ -16,6 +19,7 @@ function DefenseTurn() {
   this.done = false;
   this.result = null;
   this.interval = setInterval(this.check_shot.bind(this), 5000);
+  this.interval = setInterval(function() { that.check_shot() }, 5000);
 
 
   this.process_check_shot = function (result) {
@@ -28,6 +32,13 @@ function DefenseTurn() {
       that.result = $.parseJSON(result);
       that.end_turn();
     }
+  }
+
+  this.end_turn = function () {
+    clearInterval(this.interval);
+    this.render();
+    this.mark_done();
+    this.trigger_over();
   }
 
   this.render = function () {
@@ -55,11 +66,6 @@ function DefenseTurn() {
     $(document).trigger("turn_over", [this.done, this.result]);
   }
 
-  this.end_turn = function () {
-    clearInterval(this.interval);
-    this.render();
-    this.mark_done();
-    this.trigger_over();
-  }
+
 }
 

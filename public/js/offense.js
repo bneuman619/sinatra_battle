@@ -6,7 +6,7 @@ function OffenseTurn() {
   this.done = false;
   this.result = null;
   this.coord = null;
-  that = this;
+  var that = this;
 
 
   this.shoot = function (clicked_coord) {

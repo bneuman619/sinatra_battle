@@ -1,0 +1,12 @@
+function Foo() {
+  // init
+  var that = this;
+  this.doSomething();
+}
+
+Foo.prototype.doSomething = function() {
+  ...
+  this...
+
+  var that = this
+}
