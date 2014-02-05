@@ -1,13 +1,11 @@
 
 
 function OffenseTurn() {
-  // show_oboard();
 
   this.done = false;
   this.result = null;
   this.coord = null;
   var that = this;
-
 
   this.shoot = function (clicked_coord) {
     event.preventDefault();
@@ -29,47 +27,58 @@ function OffenseTurn() {
     };
   }
 
-  this.render = function () {
-    result_string = "You shot at " + that.coord.id + " and ";
-
-    if (this.result == true) {
-      this.mark_hit(that.coord);
-      result_string += "hit";
-    }
-
-    else {
-      this.mark_miss(that.coord)
-      result_string += "miss;"
-    }
-
-    $("#off_results").show().html(result_string);
-  }
-
-  this.trigger_end = function () {
+   this.trigger_end = function () {
     console.log("in trigger end");
     $(document).trigger("turn_over", [this.done, this.result]);
   }
 
-
-  this.mark_done = function () {
-    this.done = true;
-
-  }
-
-  this.mark_miss = function (coord_id) {
-    $(coord_id).removeClass("empty").addClass("miss");
-  }
-
-  this.mark_hit = function (coord_id) {
-    $(coord_id).removeClass("empty").addClass("hit");
+  this.render = function () {
+    new OffenseResultsView(this.coord, this.result).render();
   }
 
   this.end_turn = function () {
     console.log("In end turn");
     this.render();
     console.log("Rendered");
-    this.mark_done();
-    console.log("marked done");
     this.trigger_end();
   }
+}
+
+function OffenseResultsView(coord, result) {
+  this.coord = coord;
+  this.results = result;
+}
+
+OffenseResultsView.prototype.generate_results_string = function () {
+  string = "You shot at " + this.coord.id + " and ";
+  if (this.result) {
+    string += "hit";
+  }
+
+  else {
+    string += "miss";
+  }
+
+  return string
+}
+
+OffenseResultsView.prototype.print_string = function () {
+  result_string = this.generate_results_string();
+  $("#off_results").show().html(result_string);
+}
+
+
+OffenseResultsView.prototype.mark_board = function () {
+  if (this.result) {
+    $(this.coord).removeClass("empty").addClass("hit");
+  }
+
+  else {
+    $(this.coord).removeClass("empty").addClass("miss");
+  }
+}
+
+OffenseResultsView.prototype.render = function () {
+  this.mark_board();
+  this.print_string();
 }

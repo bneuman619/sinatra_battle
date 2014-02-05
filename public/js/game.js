@@ -1,5 +1,5 @@
-function Game() { 
-  that = this;
+function Game() {
+  var that = this;
 
   this.turn_over_listener = function() {
     $(document).on("turn_over", function(event) {
@@ -34,7 +34,7 @@ function Game() {
     console.log("next turn...");
 
     alert("Confirm when ready to switch");
-    
+
     if (this.turn.constructor.name == "DefenseTurn") {
       this.start_offense_turn();
     }
@@ -44,7 +44,7 @@ function Game() {
     }
   }
 
-  this.start_offense_turn = function() { 
+  this.start_offense_turn = function() {
     this.turn = new OffenseTurn();
     $(".coord").off();
     $(".coord").on("click", this.turn.shoot);
@@ -57,16 +57,16 @@ function Game() {
   }
 }
 
-game = new Game();
+// game = new Game();
 
-turn_over_listener = function() {
- $(document).on("turn_over", function(event) {
-    console.log("TURN OVER!");
-    game.next_turn();
-  })
-}
+// turn_over_listener = function() {
+//  $(document).on("turn_over", function(event) {
+//     console.log("TURN OVER!");
+//     game.next_turn();
+//   })
+// }
 
-turn_over_listener();
+// turn_over_listener();
 
 
 

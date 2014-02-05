@@ -15,7 +15,7 @@ function DefenseTurn() {
      })
   }
 
-  that = this;
+  var that = this;
   this.done = false;
   this.result = null;
   this.interval = setInterval(this.check_shot.bind(this), 5000);
