@@ -4,36 +4,27 @@ function OffenseTurn() {
 
   this.done = false;
   this.result = null;
-  this.coord = null;
   var that = this;
 
   this.shoot = function (clicked_coord) {
     event.preventDefault();
     console.log(event);
-    that.coord = event.target;
+    coord = event.target.id.substr(2);
 
-    $.post("/shoot", {coord: that.coord.id}, that.log_shot_result).done(that.end_turn.bind(that));
+    $.post("/shoot", {coord: coord}, that.log_shot_result).done(that.end_turn.bind(that));
   }
 
   this.log_shot_result = function (result) {
-    console.log(result);
-    if(result == "0") {
-      this.result = false;
-
-    }
-
-    else {
-      this.result = true;
-    };
+    that.result = $.parseJSON(result);
   }
 
-   this.trigger_end = function () {
+  this.trigger_end = function () {
     console.log("in trigger end");
     $(document).trigger("turn_over", [this.done, this.result]);
   }
 
   this.render = function () {
-    new OffenseResultsView(this.coord, this.result).render();
+    new OffenseResultsView(this.result).render();
   }
 
   this.end_turn = function () {
@@ -44,13 +35,13 @@ function OffenseTurn() {
   }
 }
 
-function OffenseResultsView(coord, result) {
-  this.coord = coord;
-  this.results = result;
+function OffenseResultsView(result) {
+  this.coord = result.coord;
+  this.result = result.result;
 }
 
 OffenseResultsView.prototype.generate_results_string = function () {
-  string = "You shot at " + this.coord.id + " and ";
+  var string = "You shot at " + this.coord + " and ";
   if (this.result) {
     string += "hit";
   }
@@ -63,18 +54,23 @@ OffenseResultsView.prototype.generate_results_string = function () {
 }
 
 OffenseResultsView.prototype.print_string = function () {
-  result_string = this.generate_results_string();
+  var result_string = this.generate_results_string();
   $("#off_results").show().html(result_string);
 }
 
+OffenseResultsView.prototype.generate_coord_selector = function () {
+  return "#oc" + this.coord;
+}
 
 OffenseResultsView.prototype.mark_board = function () {
+  var selector = this.generate_coord_selector();
+
   if (this.result) {
-    $(this.coord).removeClass("empty").addClass("hit");
+    $(selector).removeClass("empty").addClass("hit");
   }
 
   else {
-    $(this.coord).removeClass("empty").addClass("miss");
+    $(selector).removeClass("empty").addClass("miss");
   }
 }
 

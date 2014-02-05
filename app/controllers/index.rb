@@ -39,11 +39,11 @@ end
 post '/shoot' do
   player = get_player
   enemy = get_enemy
-  shot_coord = get_shot_coord
-  result = check_shot(shot_coord, enemy)
-  player.log_guess(shot_coord, result)
-  end_turn
-  result ? "1" : "0"
+  shot_coord = params["coord"].to_i
+  shot_result = check_shot(shot_coord, enemy)
+  player.log_guess(shot_coord, shot_result)
+  # end_turn
+  {result: shot_result, coord: shot_coord}.to_json
 end
 
 get '/check_for_shot' do
