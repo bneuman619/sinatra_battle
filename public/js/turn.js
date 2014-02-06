@@ -1,29 +1,43 @@
-// function Turn() {
+function Turn() { 
 
-//   that = this;
-//   this.turn = null;
+  this.turn = null;
+  this.set_turn();
 
-//   this.check_turn =
+}
 
-//   this.log_turn = function log_turn(turn) {
-//     console.log("In log turn");
-//     console.log("turn");
-//     if(turn === "0") {
-//       that.turn = start_offense_turn();
-//     }
+Turn.prototype.offense_turn = function () {
+  this.turn = new OffenseTurn();
+}
 
-//     else {
-//       that.turn = start_defense_turn();
-//     }
-//   }
+Turn.prototype.defense_turn = function () {
+  this.turn = new DefenseTurn();
+}
 
-//   this.render = function () {
-//     that.turn.render();
-//   }
+Turn.prototype.set_turn = function () {
+  $.ajax({
+    url: "/start_game",
+    cache: false,
+    context: this,
+    success: function (res) {
+      if (res == "0") {
+        this.defense_turn();
+      }
 
-//   this.done = function () {
-//     that.turn.done;
-//   }
+      else {
+        this.offense_turn();
+      }
+    },
+    type: "GET"
+  })
+}
 
-//   this.check_turn();
-// }
+Turn.prototype.next_turn = function() {
+
+  if (this.turn.constructor.name == "DefenseTurn") {
+    this.offense_turn();
+  }
+
+  else if (this.turn.constructor.name == "OffenseTurn") {
+    this.defense_turn();
+  }
+}

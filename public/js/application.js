@@ -3,9 +3,7 @@ $(document).ready(function() {
   $("#dboard").show();
   $("#oboard").show();
   setup();
-  // $(".coord.empty").click(function(event) { 
-  //   console.log('foo'); 
-  // });
+  game = new Game();
 })
 
 
