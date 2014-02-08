@@ -16,10 +16,14 @@ function Game() {
 }
 
 Game.prototype.end_turn = function () {
-  console.log("In end turn");
-  console.log("This is" + this);
-  console.log("$This is" + $(this));
-  this.check_game_over();
+  $.ajax({
+    url: "/check_game_over",
+    cache: false,
+    context: this,
+    dataType: 'json',
+    success: this.parse_game_over_response,
+    type: "GET"
+  }).done(this.next_turn)
 }
 
 Game.prototype.next_turn = function () {
@@ -36,17 +40,6 @@ Game.prototype.next_turn = function () {
   else {
     this.turn.next_turn();
   }
-}
-
-Game.prototype.check_game_over = function () {
-  $.ajax({
-    url: "/check_game_over",
-    cache: false,
-    context: this,
-    dataType: 'json',
-    success: this.parse_game_over_response,
-    type: "GET"
-  }).done(this.next_turn)
 }
 
 Game.prototype.parse_game_over_response = function (response) {
