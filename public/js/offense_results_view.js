@@ -1,4 +1,5 @@
 function OffenseResultsView(result) {
+  console.log(result);
   this.coord = result.coord;
   this.result = result.result;
 }

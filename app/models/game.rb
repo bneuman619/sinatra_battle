@@ -7,8 +7,7 @@ class Game < ActiveRecord::Base
     [player1, player2]
   end
 
-  def get_guesses
-    (self.player1.guesses + self.player2.guesses).sort_by { |guess| guess.id }
+  def player_ids
+    [player1.id, player2.id]
   end
-  # Remember to create a migration!
 end

@@ -20,32 +20,57 @@ helpers do
     Game.find(session[:game_id])
   end
 
-  def new_enemy_guess?
+  def get_guesses
+    player_ids = get_current_game.player_ids
+    Guess.where(player_id: player_ids)
+  end
+
+  def get_latest_guess
+    get_guesses.last
+  end
+
+  def my_turn?
     latest_guess = get_latest_guess
-    latest_guess ? (get_latest_guess.player == get_enemy) : false
-  end
-
-   def get_latest_guess
-    get_current_game.get_guesses[-1]
-  end
-
-  def get_last_enemy_guess
-    Guess.where(player_id: session[:enemy_id]).order(id: :desc).first
+    if latest_guess.nil?
+      get_player == get_current_game.player1
+    else 
+      get_latest_guess.player != get_player
+    end
   end
 
   def get_shot_coord
     params[:coord][2..-1].to_i
   end
 
-  def check_shot(shot_coord, enemy)
-    enemy.coords.any? { |coord| shot_coord == coord.coord.to_i }
+  def check_shot(shot_coord)
+    get_enemy.get_coords.any? { |coord| shot_coord == coord }
   end
 
-  def my_turn?
-    get_current_game.current_player == get_player
+  def won?
+    correct_guesses = get_player.correct_guesses
+    get_enemy.get_coords.all? do |enemy_coord|
+      correct_guesses.include? enemy_coord
+    end
   end
 
-  def end_turn
-    get_current_game.current_player = get_enemy
+  def lost?
+    enemy_guesses = get_enemy.correct_guesses
+    get_player.get_coords.all? do |player_coord|
+      enemy_guesses.include? player_coord
+    end
+  end
+
+  def build_defense_board
+    board = get_player.defense_board
+    enemy_guesses = get_enemy.correct_guesses
+    {board: board, enemy_guesses: enemy_guesses}.to_json
+  end
+
+  def build_offense_board
+    get_player.offense_board.to_json
+  end
+
+  def already_shot?(shot_coord)
+    !(Guess.find_by(coord: shot_coord, player_id: session[:player_id]).nil?)
   end
 end

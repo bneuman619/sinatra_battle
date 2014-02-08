@@ -10,23 +10,27 @@ class Player < ActiveRecord::Base
     self.update(game_id: game.id)
   end
 
-  def defense_board
-    board = Array.new(100)
-    self.coords.each do |coord|
-      board[coord.coord] = coord.ship.ship.short_name
+  def defense_board 
+    self.coords.reduce([]) do |board, coord|
+      board << {coord: coord.coord, ship: coord.ship.ship.short_name}
     end
-    board
   end
 
   def offense_board
-    board = Array.new(100)
-    self.guesses.each do |guess|
-      board[guess.coord] = guess.hit
+    self.guesses.reduce([]) do |board, guess|
+      board << {coord: guess.coord, hit: guess.hit}
     end
-    board
   end
 
   def log_guess(shot_coord, result)
     self.guesses.create(coord: shot_coord, hit: result)
+  end
+
+  def correct_guesses
+    self.guesses.where(hit: true).collect { |guess| guess.coord }
+  end
+
+  def get_coords
+    self.coords.select(:coord).collect { |coord| coord.coord }.sort
   end
 end

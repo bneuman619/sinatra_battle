@@ -6,11 +6,8 @@ function OffenseTurn() {
 
 OffenseTurn.prototype.set_click_listener = function () {
   $(".coord").off();
-  $(".coord").on("click", this.shoot.bind(this));
-}
-
-OffenseTurn.prototype.log_shot_result = function (result) {
-  this.result = result;
+  $(".coord").on("click", function () { event.preventDefault() });
+  $("#oboard .coord.empty").on("click", this.shoot.bind(this));
 }
 
 OffenseTurn.prototype.shoot = function (clicked_coord) {
@@ -21,20 +18,23 @@ OffenseTurn.prototype.shoot = function (clicked_coord) {
     url:"/shoot",
     data: {coord: coord},
     context: this,
-    success: this.log_shot_result,
+    success: this.end_turn,
     type: 'POST',
     dataType: 'json'
-    }).done(this.end_turn);
+    });
   }
 
 OffenseTurn.prototype.trigger_end = function () {
   $(document).trigger("turn_over", [this.done, this.result]);
 }
 
-OffenseTurn.prototype.end_turn = function () {
-  console.log(this);
-  this.trigger_end();
-  this.render();
+OffenseTurn.prototype.end_turn = function (result) {
+  console.log("RESULT" + result);
+  if (result) {
+    this.result = result;
+    this.trigger_end();
+    this.render();
+  }
 }
 
 OffenseTurn.prototype.render = function () {

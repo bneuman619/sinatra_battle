@@ -1,43 +1,59 @@
+function render_offense_board(coords) {
+  console.log(coords);
+  for (i = 0; i < coords.length; i ++) {
+    var coord = coords[i].coord
+    var hit = coords[i].hit
+    var css_id = "#oc" + coord
 
-
-function OffenseBoard(coords) {
-  this.coords = $.parseJSON(coords);
-  this.hits = [];
-  this.misses = [];
-  var that = this;
-
-  this.parse_coords = function parse_coords() {
-    for (i = 0; i - 1 < this.coords.length; i++) {
-      coord_value = this.coords[i];
-      if (coord_value != null) {
-        coord_id = "#oc" + (i + 1);
-
-        if (coord_value) {
-          this.hits.push(coord_id);
-        }
-
-        else {
-          this.misses.push(coord_id);
-        }
-      }
-    }
-  }
-
-  this.render = function render() {
-    for (i = 0; i < this.hits.length; i++) {
-      this.mark_hit(this.hits[i]);
+    if (hit) {
+      $(css_id).removeClass("empty").addClass("hit");
     }
 
-    for (i = 0; i < this.misses.length; i++) {
-      this.mark_miss(this.misses[i]);
+    else {
+      $(css_id).removeClass("empty").addClass("miss");
     }
-  }
-
-  this.mark_miss = function mark_miss(coord_id) {
-    $(coord_id).removeClass("empty").addClass("miss");
-  }
-
-  this.mark_hit = function mark_hit(coord_id) { 
-    $(coord_id).removeClass("empty").addClass("hit");
   }
 }
+
+// function OffenseBoard(coords) {
+//   this.coords = coords;
+//   this.hits = [];
+//   this.misses = [];
+//   this.parse_coords = function parse_coords() {
+
+//     for (i = 0; i < this.coords.length; i++) {
+//       var coord = this.coords[i].coord;
+//       var hit = this.coords[i].hit;
+//       console.log(this.coords[i]);
+
+//       if (hit) {
+//         console.log(coord + "is a hit");
+//         this.hits.push(coord);
+//       }
+
+//       else {
+//         console.log(coord + "is a miss");
+//         this.misses.push(coord);
+//       }
+//     }
+//   }
+
+//   this.render = function render() {
+//     for (i = 0; i < this.hits.length; i++) {
+//       var lookup = "#oc" + this.hits[i];
+//       this.mark_hit(lookup);
+//     }
+
+//     for (i = 0; i < this.misses.length; i++) {
+//       this.mark_miss("#oc" + this.misses[i]);
+//     }
+//   }
+
+//   this.mark_miss = function mark_miss(coord_id) {
+//     $(coord_id).removeClass("empty").addClass("miss");
+//   }
+
+//   this.mark_hit = function mark_hit(coord_id) { 
+//     $(coord_id).removeClass("empty").addClass("hit");
+//   }
+// }

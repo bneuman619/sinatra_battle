@@ -14,7 +14,7 @@ DefenseTurn.prototype.start_up = function () {
 DefenseTurn.prototype.listen_for_shot = function () {
   console.log("Checking the shot");
   $.ajax({
-      url: "/get_latest_shot",
+      url: "/opponent_turn_results",
       cache: false,
       context: this,
       success: this.process_check_shot,
@@ -24,8 +24,6 @@ DefenseTurn.prototype.listen_for_shot = function () {
 }
 
 DefenseTurn.prototype.process_check_shot = function (result) {
-  console.log(result);
-
   if (result) {
     this.result = result;
     this.end_turn();

@@ -1,22 +1,16 @@
-function DefenseBoard(coords) {
-  this.coords = $.parseJSON(coords);
-  this.ships = [];
+function render_defense_board(board_info) {
+  var coords = board_info.board;
+  var enemy_guesses = board_info.enemy_guesses;
 
-  this.parse_coords = function parse_coords() {
-    for(i = 0; i - 1 < this.coords.length; i++) {
-   
-      if (this.coords[i]) {
-        cid = "#dc" + (i + 1);
-        this.ships.push(cid);
-      };
-    }
+  for (i = 0; i < coords.length; i++) {
+    var coord = coords[i];
+    var css_id = "#dc" + coord.coord;
+    $(css_id).html(coord.ship);
+    $(css_id).removeClass('empty').addClass('ship');
   }
 
-  this.render = function render() {
-    for (i = 0; i < this.ships.length; i++) {
-      cid = this.ships[i];
-
-      $(cid).removeClass('empty').addClass('ship');
-    }
+  for (p = 0; p < enemy_guesses.length; p++) {
+    var css_id = "#dc" + enemy_guesses[p];
+    $(css_id).addClass('hit');
   }
 }

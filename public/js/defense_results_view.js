@@ -6,12 +6,12 @@ function DefenseResultsView(result) {
 
 DefenseResultsView.prototype.generate_results_string = function () {
   var string = "Opponent shot at " + this.coord + " and ";
-  if (this.result.hit) {
+  if (this.result) {
     string += "hit";
   }
 
   else {
-    string += "hit";
+    string += "missed";
   }
 
   return string;
@@ -29,8 +29,8 @@ DefenseResultsView.prototype.generate_coord_selector = function () {
 DefenseResultsView.prototype.mark_board = function () {
   var selector = this.generate_coord_selector();
 
-  if (this.result.hit) {
-    $(selector).removeClass("empty").addClass("hit");
+  if (this.result) {
+    $(selector).addClass("hit");
   }
 
   else {

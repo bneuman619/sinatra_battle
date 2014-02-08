@@ -1,16 +1,72 @@
 function Game() {
 
   this.turn = new Turn();
+  this.over = false;
+  this.won = null;
  
   this.turn_over_listener = function() {
     var that = this;
     $(document).on("turn_over", function(event) {
       console.log("turn over!");
-      that.turn.next_turn();
+      that.end_turn();
     })
   }
 
-   this.turn_over_listener();
+  this.turn_over_listener();
+}
+
+Game.prototype.end_turn = function () {
+  console.log("In end turn");
+  console.log("This is" + this);
+  console.log("$This is" + $(this));
+  this.check_game_over();
+}
+
+Game.prototype.next_turn = function () {
+  if (this.over) {
+    if (this.won) {
+      alert("Game over. You won");
+    }
+
+    else {
+      alert("Game over. You lost.");
+    }
+  }
+
+  else {
+    this.turn.next_turn();
+  }
+}
+
+Game.prototype.check_game_over = function () {
+  $.ajax({
+    url: "/check_game_over",
+    cache: false,
+    context: this,
+    dataType: 'json',
+    success: this.parse_game_over_response,
+    type: "GET"
+  }).done(this.next_turn)
+}
+
+Game.prototype.parse_game_over_response = function (response) {
+  console.log("Checking game over");
+  if (response) {
+    console.log("Game is over");
+    console.log(response);
+    this.over = true;
+    if (response == 1) {
+      this.won = true;
+    }
+
+    else {
+      this.lost = true;
+    }
+  }
+
+  else {
+    console.log("game not over");
+  }
 }
 
 

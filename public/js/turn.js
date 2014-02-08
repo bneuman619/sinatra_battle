@@ -2,7 +2,7 @@ function Turn() {
 
   this.turn = null;
   this.set_turn();
-
+  
 }
 
 Turn.prototype.offense_turn = function () {
@@ -15,16 +15,17 @@ Turn.prototype.defense_turn = function () {
 
 Turn.prototype.set_turn = function () {
   $.ajax({
-    url: "/start_game",
+    url: "/check_turn",
     cache: false,
     context: this,
-    success: function (res) {
-      if (res == "0") {
-        this.defense_turn();
+    dataType: 'json',
+    success: function (my_turn) {
+      if (my_turn) {
+        this.offense_turn();
       }
 
       else {
-        this.offense_turn();
+        this.defense_turn();
       }
     },
     type: "GET"
