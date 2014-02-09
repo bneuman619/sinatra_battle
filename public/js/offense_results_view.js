@@ -7,6 +7,9 @@ function OffenseResultsView(result) {
 
 OffenseResultsView.prototype.generate_results_string = function () {
   var string = "You shot at " + this.coord + " and ";
+  console.log("HIT?" + this.hit);
+  console.log("SUNK?" + this.sunk);
+
   if (this.hit) {
     string += "hit";
   }
@@ -15,8 +18,8 @@ OffenseResultsView.prototype.generate_results_string = function () {
     string += "miss";
   }
 
-  if (this.sunk) {
-    string += "\nYou sunk ship " + this.name;
+  if (this.result.sunk) {
+    string += "\nYou sunk ship " + this.result.name;
   }
 
   return string

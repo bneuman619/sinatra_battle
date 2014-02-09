@@ -15,7 +15,7 @@ DefenseResultsView.prototype.generate_results_string = function () {
     string += "missed";
   }
 
-  if (this.sunk) {
+  if (this.result.sunk) {
     string += "\n Opponent sunk ship" + this.result.name;
   }
 
@@ -34,7 +34,7 @@ DefenseResultsView.prototype.generate_coord_selector = function () {
 DefenseResultsView.prototype.mark_board = function () {
   var selector = this.generate_coord_selector();
 
-  if (this.result) {
+  if (this.hit) {
     $(selector).addClass("hit");
   }
 
