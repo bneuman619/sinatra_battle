@@ -33,4 +33,9 @@ class Player < ActiveRecord::Base
   def get_coords
     self.coords.select(:coord).collect { |coord| coord.coord }.sort
   end
+
+  def find_ship_by_coord(coord)
+    board_coord = self.coords.find_by(coord: coord)
+    board_coord ? board_coord.ship : nil
+  end
 end

@@ -1,17 +1,22 @@
 function DefenseResultsView(result) {
   console.log(result);
+  this.result = result
   this.coord = result.coord;
-  this.result = result.hit;
+  this.hit = result.hit;
 }
 
 DefenseResultsView.prototype.generate_results_string = function () {
   var string = "Opponent shot at " + this.coord + " and ";
-  if (this.result) {
+  if (this.hit) {
     string += "hit";
   }
 
   else {
     string += "missed";
+  }
+
+  if (this.sunk) {
+    string += "\n Opponent sunk ship" + this.result.name;
   }
 
   return string;

@@ -1,17 +1,22 @@
 function OffenseResultsView(result) {
   console.log(result);
+  this.result = result;
   this.coord = result.coord;
-  this.result = result.result;
+  this.hit = result.hit;
 }
 
 OffenseResultsView.prototype.generate_results_string = function () {
   var string = "You shot at " + this.coord + " and ";
-  if (this.result) {
+  if (this.hit) {
     string += "hit";
   }
 
   else {
     string += "miss";
+  }
+
+  if (this.sunk) {
+    string += "\nYou sunk ship " + this.name;
   }
 
   return string
@@ -29,7 +34,7 @@ OffenseResultsView.prototype.generate_coord_selector = function () {
 OffenseResultsView.prototype.mark_board = function () {
   var selector = this.generate_coord_selector();
 
-  if (this.result) {
+  if (this.hit) {
     $(selector).removeClass("empty").addClass("hit");
   }
 

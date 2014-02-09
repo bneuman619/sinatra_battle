@@ -8,4 +8,25 @@ class PlayerShip < ActiveRecord::Base
     ship = PlayerShip.create(ship_cfg)
     coords.each { |coord| ship.coords.create(coord: coord, ship: ship, hit: 0) }
   end
+
+  def sunk?
+    self.update(sunk: check_sunk)
+    self.sunk
+  end
+
+  def check_sunk
+    return true if self.sunk
+    enemy = self.player.game.players.find { |player| player != self.player }
+    coords = self.get_coords
+    Guess.where(player: enemy, coord: coords).uniq.size == 
+    coords.size
+  end
+
+  def get_coords
+    self.coords.collect { |coord| coord.coord }
+  end
+
+  def name
+    self.ship.name
+  end
 end

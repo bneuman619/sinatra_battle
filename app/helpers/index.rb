@@ -1,4 +1,5 @@
 helpers do
+
   def get_player
     Player.find(session[:player_id])
   end
@@ -42,9 +43,25 @@ helpers do
     params[:coord][2..-1].to_i
   end
 
-  def check_shot(shot_coord)
-    get_enemy.get_coords.any? { |coord| shot_coord == coord }
+  def get_nil_ship
+    Struct.new {
+    def sunk
+      false
+    end
+
+    def name
+      ""
+    end
+    }
   end
+
+  def get_shot_results(shot_coord)
+    ship = get_enemy.find_ship_by_coord(shot_coord)
+    hit = !(ship.nil?)
+    guess = get_player.log_guess(shot_coord, hit)
+    {guess: guess,  ship: ship}
+  end
+
 
   def won?
     correct_guesses = get_player.correct_guesses
@@ -73,4 +90,6 @@ helpers do
   def already_shot?(shot_coord)
     !(Guess.find_by(coord: shot_coord, player_id: session[:player_id]).nil?)
   end
+
+
 end

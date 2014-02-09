@@ -3,6 +3,7 @@ class CreatePlayerShips < ActiveRecord::Migration
     create_table :player_ships do |t|
       t.integer :player_id
       t.integer :ship_id
+      t.boolean :sunk, default: false
     end
   end
 end

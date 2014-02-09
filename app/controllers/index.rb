@@ -35,19 +35,36 @@ end
 post '/shoot' do
   shot_coord = params["coord"].to_i
   return 'false' if already_shot?(shot_coord)
-  shot_result = check_shot(shot_coord)
-  get_player.log_guess(shot_coord, shot_result)
-  {result: shot_result, coord: shot_coord}.to_json
+  shot_results = get_shot_results(shot_coord)
+  guess = shot_results[:guess]
+  ship = shot_results[:ship]
+  if ship
+    {coord: guess.coord,
+     hit: guess.hit,
+     sunk: ship.sunk?,
+     name: ship.name
+     }.to_json
+  else
+    {coord: guess.coord,
+      hit: guess.hit,
+      sunk: false}.to_json
+    end
 end
 
 get '/opponent_turn_results' do
   latest_guess = get_latest_guess
   return "false" if latest_guess.nil?
-
-  if latest_guess.player == get_player
-    "false"
+  return "false" if latest_guess.player == get_player
+  ship = get_player.find_ship_by_coord(latest_guess.coord)
+  if ship
+    {coord: latest_guess.coord, 
+     hit: latest_guess.hit, 
+     sunk: ship.sunk?,
+     name: ship.name}.to_json
   else
-    latest_guess.to_json
+    {coord: latest_guess.coord,
+     hit: latest_guess.hit,
+     sunk: false}.to_json
   end
 end
 
