@@ -6,7 +6,7 @@ helpers do
 
   def set_enemy_id
     player = get_player
-    session[:enemy_id] = player.game.players.find { |p| p != player }.id 
+    session[:enemy_id] = player.game.players.find { |p| p != player }.id
   end
 
   def set_game_id
@@ -34,7 +34,7 @@ helpers do
     latest_guess = get_latest_guess
     if latest_guess.nil?
       get_player == get_current_game.player1
-    else 
+    else
       get_latest_guess.player != get_player
     end
   end
@@ -55,13 +55,26 @@ helpers do
     }
   end
 
-  def get_shot_results(shot_coord)
-    ship = get_enemy.find_ship_by_coord(shot_coord)
-    hit = !(ship.nil?)
-    guess = get_player.log_guess(shot_coord, hit)
-    {guess: guess,  ship: ship}
+  def log_shot_result(shot_coord)
+    ship_id = get_enemy.find_ship_id_by_coord(shot_coord)
+    hit = (ship_id == 0 ? false : true)
+    get_player.log_guess(coord: shot_coord,
+                         hit: hit,
+                         ship_id: ship_id)
+
   end
 
+  def parse_shot_result(shot_result)
+    if shot_result.hit
+      ship = PlayerShip.find(shot_result.ship_id)
+      {coord: shot_result.coord,
+       hit: shot_result.hit,
+       sunk: ship.sunk?,
+       name: ship.name}.to_json
+    else
+      shot_result.to_json
+    end
+  end
 
   def won?
     correct_guesses = get_player.correct_guesses

@@ -10,7 +10,7 @@ class Player < ActiveRecord::Base
     self.update(game_id: game.id)
   end
 
-  def defense_board 
+  def defense_board
     self.coords.reduce([]) do |board, coord|
       board << {coord: coord.coord, ship: coord.ship.ship.short_name}
     end
@@ -22,8 +22,8 @@ class Player < ActiveRecord::Base
     end
   end
 
-  def log_guess(shot_coord, result)
-    self.guesses.create(coord: shot_coord, hit: result)
+  def log_guess(params)
+    self.guesses.create(params)
   end
 
   def correct_guesses
@@ -34,8 +34,8 @@ class Player < ActiveRecord::Base
     self.coords.select(:coord).collect { |coord| coord.coord }.sort
   end
 
-  def find_ship_by_coord(coord)
+  def find_ship_id_by_coord(coord)
     board_coord = self.coords.find_by(coord: coord)
-    board_coord ? board_coord.ship : nil
+    board_coord ? board_coord.ship.id : 0
   end
 end
