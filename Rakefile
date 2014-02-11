@@ -116,6 +116,7 @@ namespace :db do
   task :version do
     puts "Current version: #{ActiveRecord::Migrator.current_version}"
   end
+
 end
 
 desc 'Start IRB with application environment loaded'
@@ -127,3 +128,5 @@ desc "Run the specs"
 RSpec::Core::RakeTask.new(:spec)
 
 task :default  => :specs
+
+
