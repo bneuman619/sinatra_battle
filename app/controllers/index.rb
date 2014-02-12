@@ -1,4 +1,5 @@
 get '/' do
+  @player = Player.find_by(:id => session[:player_id])
   erb :index
 end
 

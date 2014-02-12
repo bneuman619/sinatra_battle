@@ -19,3 +19,5 @@ gem 'shotgun'
 
 gem 'faker'
 gem 'rspec'
+gem 'capybara'
+gem 'selenium-webdriver'

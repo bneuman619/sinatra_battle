@@ -8,3 +8,18 @@ require 'rubygems'
 ENV['RACK_ENV'] ||= 'test'
 
 require File.expand_path("../../config/environment", __FILE__)
+
+set :app_file, File.expand_path("../../config.ru", __FILE__)
+
+configure do
+  # See: http://www.sinatrarb.com/faq.html#sessions
+  enable :sessions
+  set :session_secret, ENV['SESSION_SECRET'] || 'this is a secret shhhhh'
+
+  # Set the views to
+  set :views, File.join(Sinatra::Application.root, "app", "views")
+end
+
+require 'capybara/rspec'
+Capybara.default_driver = :selenium
+Capybara.app = Sinatra::Application

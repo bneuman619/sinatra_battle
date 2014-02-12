@@ -2,6 +2,9 @@
 
 </head>
 
+<% if session[:player_id] %>
+  player<%= @player.id %>
+<% end %>
 <div id="oboard">
 <h2 id="board_name">Offense</h2>
 <div class="row" id="ocnum_row">
