@@ -3,11 +3,11 @@ class Guess < ActiveRecord::Base
   # validates :coord, uniqueness: { scope: :player_id } 
   # Remember to create a migration!
 
-  def hit
-    coordinate.have_ship?
-  end
+  # def hit
+  #   coordinate.have_ship?
+  # end
 
-  def coord
-    coordinate.coord
-  end
+  # def coord
+  #   coordinate.coord
+  # end
 end

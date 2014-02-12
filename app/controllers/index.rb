@@ -51,37 +51,41 @@ post '/shoot' do
     end
 end
 
-class Ship
+class Boat
   attr_reader :name
-  def initialize(name)
-    @name = name
+  def initialize(ship)
+    @name = ship.name
+    @coords = ship.get_coords
+    @ship = ship
   end
 
   def sunk?
-    true
+    enemy = @ship.player.game.players.find { |player| player != @ship.player }
+    @coords.all? { |coord| enemy.coords.include? coord }
   end
 end
 
 class Coordinate
   attr_reader :coordinate, :ship
   def initialize(coordinate, ship)
-    @coordinate=coordinate
+    @coordinate = coordinate
     @ship = ship
   end
 
-  def hit
-    true
+  def hit?
+    !(@ship).nil?
   end
 end
 
-class Gluess
+class Shot
+  attr_reader :player
   def initialize(player, coordinate)
     @player = player
     @coordinate = coordinate
   end
 
   def hit?
-    @coordinate.hit
+    @coordinate.hit?
   end
 
   def coordinate
@@ -97,33 +101,55 @@ class LatestTurnResult
   attr_reader :latest_guess, :guess
   def initialize(game)
     @game = game
-    @guess = @game.get_last_guess
+    @shot = build_results
   end
 
   def hit?
-    @guess.hit?
+    @shot.hit?
   end
 
   def coord
-    @guess.coordinate
+    @shot.coordinate
   end
 
   def ship
-    @guess.ship
+    @shot.ship
   end
+
+  def player
+    @shot.player
+  end
+
+  def build_results
+    guess = @game.last_guess
+    coordinate = guess.coord
+    enemy = @game.players.find { |player| player != guess.player }
+    ship = Boat.new(enemy.find_ship_by_coord(coordinate))
+    coord_obj = Coordinate.new(coordinate, ship)
+    Shot.new(guess.player, coord_obj)
+  end
+
 end
 
 class Glame
-  def initialize
-    @guesses = [Gluess.new(1, Coordinate.new(1, Ship.new('foo')))]
+  def initialize(id)
+    @game = Game.find(1)
+    # @guesses = [Gluess.new(1, Coordinate.new(1, Ship.new('foo')))]
   end
-  def get_last_guess
-    @guesses[-1]
+
+  def last_guess
+    @game.guesses.last
   end
+
+  def players
+    @game.players
+  end
+
 end
 
 def parse_turn_result(turn_result)
-  {coord: turn_result.coord,
+  {player: turn_result.player,
+    coord: turn_result.coord,
    hit: turn_result.hit?,
    ship: {name: turn_result.ship.name,
           sunk: turn_result.ship.sunk?}}.to_json
@@ -131,7 +157,7 @@ def parse_turn_result(turn_result)
 end
 
 get '/opponent_turn_results' do
-  game = Glame.new
+  game = Glame.new(1)
   turn_result = LatestTurnResult.new(game)
   parse_turn_result(turn_result)
   # parse_turn_result(LatestTurnResult.new(1))
