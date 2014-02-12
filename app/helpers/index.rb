@@ -1,5 +1,8 @@
 helpers do
 
+  def parse_turn_resut(turn_result)
+  end
+
   def get_player
     Player.find(session[:player_id])
   end

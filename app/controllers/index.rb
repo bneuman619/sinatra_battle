@@ -51,21 +51,104 @@ post '/shoot' do
     end
 end
 
-get '/opponent_turn_results' do
-  latest_guess = get_latest_guess
-  return "false" if latest_guess.nil?
-  return "false" if latest_guess.player == get_player
-  ship = get_player.find_ship_by_coord(latest_guess.coord)
-  if ship
-    {coord: latest_guess.coord, 
-     hit: latest_guess.hit, 
-     sunk: ship.sunk?,
-     name: ship.name}.to_json
-  else
-    {coord: latest_guess.coord,
-     hit: latest_guess.hit,
-     sunk: false}.to_json
+class Ship
+  attr_reader :name
+  def initialize(name)
+    @name = name
   end
+
+  def sunk?
+    true
+  end
+end
+
+class Coordinate
+  attr_reader :coordinate, :ship
+  def initialize(coordinate, ship)
+    @coordinate=coordinate
+    @ship = ship
+  end
+
+  def hit
+    true
+  end
+end
+
+class Gluess
+  def initialize(player, coordinate)
+    @player = player
+    @coordinate = coordinate
+  end
+
+  def hit?
+    @coordinate.hit
+  end
+
+  def coordinate
+    @coordinate.coordinate
+  end
+
+  def ship
+    @coordinate.ship
+  end
+end
+
+class LatestTurnResult
+  attr_reader :latest_guess, :guess
+  def initialize(game)
+    @game = game
+    @guess = @game.get_last_guess
+  end
+
+  def hit?
+    @guess.hit?
+  end
+
+  def coord
+    @guess.coordinate
+  end
+
+  def ship
+    @guess.ship
+  end
+end
+
+class Glame
+  def initialize
+    @guesses = [Gluess.new(1, Coordinate.new(1, Ship.new('foo')))]
+  end
+  def get_last_guess
+    @guesses[-1]
+  end
+end
+
+def parse_turn_result(turn_result)
+  {coord: turn_result.coord,
+   hit: turn_result.hit?,
+   ship: {name: turn_result.ship.name,
+          sunk: turn_result.ship.sunk?}}.to_json
+  # turn_result.ship.to_json
+end
+
+get '/opponent_turn_results' do
+  game = Glame.new
+  turn_result = LatestTurnResult.new(game)
+  parse_turn_result(turn_result)
+  # parse_turn_result(LatestTurnResult.new(1))
+  # latest_guess = get_latest_guess
+  # return "false" if latest_guess.nil?
+  # return "false" if latest_guess.player == get_player
+  # ship = get_player.find_ship_by_coord(latest_guess.coord)
+  # if ship
+  #   {coord: latest_guess.coord, 
+  #    hit: latest_guess.hit, 
+  #    sunk: ship.sunk?,
+  #    name: ship.name}.to_json
+  # else
+  #   {coord: latest_guess.coord,
+  #    hit: latest_guess.hit,
+  #    sunk: false}.to_json
+  # end
 end
 
 get '/check_game_over' do
