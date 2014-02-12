@@ -39,11 +39,31 @@ post '/shoot' do
   parse_shot_result(shot_result)
 end
 
-get '/opponent_turn_results' do
-  latest_guess = get_latest_guess
-  return "false" if latest_guess.nil?
-  return "false" if latest_guess.player == get_player
-  parse_shot_result(latest_guess)
+
+
+class LatestTurnResult
+  attr_reader :latest_guess
+  def initialize(game_id)
+    @latest_guess = Guess.where(id: game_id).last
+  end
+
+  def turn_over?
+    !(@latest_guess.nil? || @latest_guess.player == get_player)
+  end
+
+  def hit
+    @latest_guess.hit
+  end
+end
+
+get '/opponent_turn_result' do
+
+  parse_shot_result(LatestTurnResult.new(1))
+
+  # latest_guess = get_latest_guess
+  # return "false" if latest_guess.nil?
+  # return "false" if latest_guess.player == get_player
+  # parse_shot_result(latest_guess)
 end
 
 get '/check_game_over' do
