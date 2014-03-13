@@ -1,5 +1,4 @@
 $(document).ready(function() {
-  console.log('hello');
   $("#dboard").show();
   $("#oboard").show();
   setup();
@@ -9,7 +8,6 @@ $(document).ready(function() {
 
 
 function setup() {
-  console.log("I hate JS");
     $.ajax({
       url: "/defense_board",
       cache: false,
