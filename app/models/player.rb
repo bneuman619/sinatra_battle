@@ -3,7 +3,7 @@ class Player < ActiveRecord::Base
   belongs_to :user
   belongs_to :game
   has_many :ships, class_name: "PlayerShip"
-  has_many :coords, through: :ships
+  has_many :coords, class_name: "PlayerCoord"
   has_many :guesses
   # Remember to create a migration!
   def set_game(game)
@@ -39,3 +39,4 @@ class Player < ActiveRecord::Base
     board_coord ? board_coord.ship.id : 0
   end
 end
+
