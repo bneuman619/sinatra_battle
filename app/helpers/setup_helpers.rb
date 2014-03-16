@@ -17,9 +17,8 @@ helpers do
   end
 
   def build_defense_board
-    board = DefenseBoard.new(get_player).coords
-    enemy_guesses = get_enemy.correct_guesses
-    {board: board, enemy_guesses: enemy_guesses}.to_json
+    board = DefenseBoard.new(get_player, get_enemy)
+    board.board_data.to_json
   end
 
   def build_offense_board
