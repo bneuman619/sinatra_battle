@@ -36,5 +36,4 @@ describe DefenseBoard do
        {ship_name: "Cruiser", coord: 42},
        {ship_name: "Carrier", coord: 52}])
   end
-
 end
