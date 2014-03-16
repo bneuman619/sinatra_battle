@@ -36,4 +36,13 @@ describe DefenseBoard do
        {ship_name: "Cruiser", coord: 42},
        {ship_name: "Carrier", coord: 52}])
   end
+
+  it "finds correct guesses for a player" do
+    guess1 = @player.guesses.create(coord: 34, hit: true)
+    guess2 = @player.guesses.create(coord: 44, hit: true)
+    guess3 = @player.guesses.create(coord: 54, hit: false)
+    defense_board = DefenseBoard.new(@player)
+    expect(defense_board.correct_guesses(@player).sort).
+    to eq([34, 44].sort)
+  end
 end

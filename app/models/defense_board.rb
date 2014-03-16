@@ -14,4 +14,12 @@ class DefenseBoard
       coord: coord.coord
     }
   end
+
+  # def enemy_hits
+  #   @player.game.players.reject { |p| p == @player }.first.correct_guesses
+  # end
+
+  def correct_guesses(enemy)
+    player.guesses.where(hit: true).map { |guess| guess.coord }
+  end
 end
