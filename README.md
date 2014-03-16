@@ -1,7 +1,16 @@
-sinatra_battle
-==============
 
 This is a Sinatra-based web version of the game Battleship.
+
+My focus during this project was practicing my JavaScript chops, learning about Ajax polling in turn-based games,
+and writing good/clear OOJS.
+
+So, the JS is okay while the non-JS (controllers, models) are a messy horrendous hack.
+
+I received some great feedback re: un-messing the controllers from Corey Haines. He also gave me advice on how to apply EDD/TDD to this project.
+
+Now that I finally have time I am trying to go back and apply some of Corey's advice to rewrite the controllers and helpers. It might be better just to start over again, but I am finding it helpful to go bit-by-bit on a program that already 'works'.
+
+-------------------------------------------------------------------------------------------------------------
 
 To run: git clone the repository. Then rake db:create, rake db:migrate, rake db:seed.
 
