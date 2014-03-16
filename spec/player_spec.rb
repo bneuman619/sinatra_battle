@@ -13,9 +13,28 @@ describe DefenseBoard do
     occupied_coord = PlayerCoord.create(player: @player, player_ship_id: 1)
     occupied_coord.stub(:ship_name) { "Destroyer" }
     occupied_coord.stub(:coord) { 32 }
-    @player.stub(:coords) { [occupied_coord]}
-    expect(DefenseBoard.new(@player).coords.first)
+    board = DefenseBoard.new(@player)
+    expect(board.parse_coord(occupied_coord))
     .to eq({ship_name: "Destroyer",
             coord: 32})
   end
+
+  it "returns array of coords" do
+    occupied_coord = PlayerCoord.create(player: @player, player_ship_id: 1)
+    occupied_coord.stub(:ship_name) { "Destroyer" }
+    occupied_coord.stub(:coord) { 32 }
+    occupied_coord2 = PlayerCoord.create(player: @player, player_ship_id: 1)
+    occupied_coord2.stub(:ship_name) { "Cruiser" }
+    occupied_coord2.stub(:coord) { 42 }
+    occupied_coord3 = PlayerCoord.create(player: @player, player_ship_id: 1)
+    occupied_coord3.stub(:ship_name) { "Carrier" }
+    occupied_coord3.stub(:coord) { 52 }
+    @player.stub(:coords) { [occupied_coord, occupied_coord2, occupied_coord3]}
+    
+    expect(DefenseBoard.new(@player).coords).to eq(
+      [{ship_name: "Destroyer", coord: 32},
+       {ship_name: "Cruiser", coord: 42},
+       {ship_name: "Carrier", coord: 52}])
+  end
+
 end
