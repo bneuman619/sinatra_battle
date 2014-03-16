@@ -10,10 +10,11 @@ describe DefenseBoard do
   end
 
   it "builds hash for occupied coord for player" do
-    occupied_coord = PlayerCoord.create(player_id: 1)
+    occupied_coord = PlayerCoord.create(player: @player, player_ship_id: 1)
     occupied_coord.stub(:ship_name) { "Destroyer" }
     occupied_coord.stub(:coord) { 32 }
-    expect(DefenseBoard.new(Player.first).coords.first)
+    @player.stub(:coords) { [occupied_coord]}
+    expect(DefenseBoard.new(@player).coords.first)
     .to eq({ship_name: "Destroyer",
             coord: 32})
   end
