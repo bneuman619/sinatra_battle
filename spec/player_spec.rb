@@ -48,11 +48,18 @@ describe DefenseBoard do
     to eq([34, 44].sort)
   end
 
-  it "looks up the enemy" do
-    player2 = Player.create(user_id: 2, game_id: 1)
-    game = Game.create(id: 1, player1_id: 1, player2_id: 2)
-    @player.game.stub(:players) { [@player, player2] }
-    defense_board = DefenseBoard.new(@player)
-    expect(defense_board.get_enemy).to eq(player2)
+  it "returns a hash with ship placement and enemy guesses" do
+    board = DefenseBoard.new(@player, @player)
+    correct_guesses = [34,44]
+    coords =  
+            [{ship_name: "Destroyer", coord: 32},
+            {ship_name: "Cruiser", coord: 42},
+            {ship_name: "Carrier", coord: 52}]
+
+    board.stub(:correct_guesses) { correct_guesses }
+    board.stub(:coords) { coords }
+    expect(board.board_data).to eq(
+      {board: coords,
+       enemy_guesses: correct_guesses})
   end
 end

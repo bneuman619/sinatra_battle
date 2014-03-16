@@ -1,7 +1,14 @@
 class DefenseBoard
   attr_reader :player
-  def initialize(player)
+  def initialize(player, enemy=nil)
     @player = player
+    @enemy = enemy
+  end
+
+  def board_data
+    {board: coords,
+     enemy_guesses: correct_guesses(@enemy)
+    }
   end
 
   def coords
@@ -17,9 +24,5 @@ class DefenseBoard
 
   def correct_guesses(enemy)
     player.guesses.where(hit: true).map { |guess| guess.coord }
-  end
-
-  def get_enemy
-    @player.game.players.select { |p| p != @player }.first
   end
 end
