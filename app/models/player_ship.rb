@@ -6,7 +6,7 @@ class PlayerShip < ActiveRecord::Base
   def self.add_ship(ship_cfg)
     coords = ship_cfg.delete(:coords)
     ship = PlayerShip.create(ship_cfg)
-    coords.each { |coord| ship.coords.create(coord: coord, ship: ship, hit: 0) }
+    coords.each { |coord| ship.coords.create(coord: coord, ship: ship, player: ship.player, hit: 0) }
   end
 
   def sunk?
