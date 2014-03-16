@@ -2,6 +2,8 @@ require_relative 'spec_helper'
 
 describe DefenseBoard do
   before {
+    Player.destroy_all
+    Game.destroy_all
     @player = Player.create(user_id: 1, game_id: 1)
   }
 
@@ -44,5 +46,13 @@ describe DefenseBoard do
     defense_board = DefenseBoard.new(@player)
     expect(defense_board.correct_guesses(@player).sort).
     to eq([34, 44].sort)
+  end
+
+  it "looks up the enemy" do
+    player2 = Player.create(user_id: 2, game_id: 1)
+    game = Game.create(id: 1, player1_id: 1, player2_id: 2)
+    @player.game.stub(:players) { [@player, player2] }
+    defense_board = DefenseBoard.new(@player)
+    expect(defense_board.get_enemy).to eq(player2)
   end
 end

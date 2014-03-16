@@ -15,11 +15,11 @@ class DefenseBoard
     }
   end
 
-  # def enemy_hits
-  #   @player.game.players.reject { |p| p == @player }.first.correct_guesses
-  # end
-
   def correct_guesses(enemy)
     player.guesses.where(hit: true).map { |guess| guess.coord }
+  end
+
+  def get_enemy
+    @player.game.players.select { |p| p != @player }.first
   end
 end
